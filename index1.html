@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تهنئة العيد - كتاب تفاعلي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-paper: #f9f4e8;
+            --border-color: #d1b894;
+            --text-color: #5d5448;
+        }
+
+        body {
+            background-color: #e5ddd0;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Amiri', serif;
+            overflow: hidden;
+        }
+
+        /* حاوية الكتاب */
+        .book {
+            position: relative;
+            width: 800px; /* عرض صفحتين */
+            height: 550px;
+            perspective: 2000px;
+            transition: transform 0.5s;
+        }
+
+        /* الصفحة الواحدة */
+        .page {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            top: 0;
+            right: 0; /* الترتيب العربي */
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+            z-index: 1;
+        }
+
+        /* واجهة وظهر كل صفحة */
+        .front, .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: var(--bg-paper);
+            backface-visibility: hidden;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: inset 0 0 100px rgba(209, 184, 148, 0.1);
+        }
+
+        /* الزخارف (Border) المحاكية للصور */
+        .page-border {
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 1px solid rgba(176, 141, 87, 0.4);
+            pointer-events: none;
+        }
+        
+        /* زخارف الزوايا */
+        .corner {
+            position: absolute;
+            width: 80px; height: 80px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+        }
+        /* زاوية علوية يمين */
+        .c-tr { top: 0; right: 0; border-top: 3px solid var(--border-color); border-right: 3px solid var(--border-color); border-radius: 0 15px 0 0; }
+        .c-tl { top: 0; left: 0; border-top: 3px solid var(--border-color); border-left: 3px solid var(--border-color); border-radius: 15px 0 0 0; }
+        .c-br { bottom: 0; right: 0; border-bottom: 3px solid var(--border-color); border-right: 3px solid var(--border-color); border-radius: 0 0 15px 0; }
+        .c-bl { bottom: 0; left: 0; border-bottom: 3px solid var(--border-color); border-left: 3px solid var(--border-color); border-radius: 0 0 0 15px; }
+
+        .back {
+            transform: rotateY(180deg);
+        }
+
+        /* حالة قلب الصفحة */
+        .page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        /* تنسيق النصوص */
+        h1 { font-size: 3rem; color: var(--text-color); margin: 0; }
+        h2 { font-size: 1.8rem; color: #b08d57; margin-bottom: 20px; font-family: 'Cairo', sans-serif; }
+        p { font-size: 1.4rem; color: var(--text-color); line-height: 1.8; }
+        
+        .ornament-icon { font-size: 2.5rem; color: var(--border-color); margin: 15px 0; }
+
+        /* ترتيب الصفحات (Z-index) */
+        #p1 { z-index: 3; }
+        #p2 { z-index: 2; }
+        #p3 { z-index: 1; }
+
+        /* تلميح في الأسفل */
+        .hint {
+            position: fixed;
+            bottom: 30px;
+            color: #8d8475;
+            font-family: 'Cairo', sans-serif;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+    </style>
+</head>
+<body>
+
+    <div class="book" id="book">
+        
+        <div class="page" id="p1" onclick="flipPage(1)">
+            <div class="front">
+                <div class="page-border"></div>
+                <div class="corner c-tr"></div><div class="corner c-tl"></div>
+                <div class="corner c-br"></div><div class="corner c-bl"></div>
+                
+                <div class="ornament-icon">❦</div>
+                <h1>كل عام وأنتم بخير</h1>
+                <p>عيدكم مبارك وعساكم من عواده</p>
+                <div class="ornament-icon">❦</div>
+            </div>
+            <div class="back">
+                <div class="page-border"></div>
+                <h2>اتقدم لكم باحر التهاني والتبريكات وكل عام وانتم بخير </h2>
+                <div class="ornament-icon">✨</div>
+            </div>
+        </div>
+
+        <div class="page" id="p2" onclick="flipPage(2)">
+            <div class="front">
+                <div class="page-border"></div>
+                <div class="corner c-tr"></div><div class="corner c-tl"></div>
+                <p>إلى عائلتي العزيزه </p>
+            </div>
+            <div class="back">
+                <div class="page-border"></div>
+                <h1>عيد مبارك </h1>
+                <div class="ornament-icon">❦</div>
+            </div>
+        </div>
+
+        <div class="page" id="p3" style="pointer-events: none;">
+            <div class="front">
+                <div class="page-border"></div>
+                <h2> </h2>
+                <p>ابنكم وائل </p>
+                <div class="ornament-icon">🕊️</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="hint">اضغط على الصفحات لقلبها  📖</div>
+
+    <script>
+        function flipPage(pageId) {
+            const page = document.getElementById('p' + pageId);
+            page.classList.toggle('flipped');
+            
+            // إدارة الـ z-index لضمان ظهور الصفحات بشكل صحيح أثناء القلب
+            if (page.classList.contains('flipped')) {
+                setTimeout(() => {
+                    page.style.zIndex = pageId;
+                }, 500);
+            } else {
+                setTimeout(() => {
+                    page.style.zIndex = 5 - pageId;
+                }, 500);
+            }
+        }
+    </script>
+</body>
+</html>
